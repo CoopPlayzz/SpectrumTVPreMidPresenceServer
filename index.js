@@ -48,4 +48,4 @@ app.get('/channelOver/:uri', async (req, res) => {
   })
 
 
-app.listen(process.env.port || '30028')
+app.listen(process.env.PORT || '30028')
