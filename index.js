@@ -1,8 +1,33 @@
 const express = require('express')
 const app = express()
+const rateLimit = require('express-rate-limit')
 const { createCanvas, loadImage } = require('canvas')
 const cors = require('cors')
-
+const rateLimitConfig = {api:{"maxReq": "25","time": "1 m"},reg:{"maxReq": "1000","time": "14 m"}}
+/** 
+ * @param {("api"|"reg")} typee*/
+function rateLimitWindow(typee){
+  const WinMS = process.env["RateLimit-WindowTime-"+typee.toUpperCase()] || rateLimitConfig[typee.toLowerCase()].time
+  const WinMSTime = WinMS.split(" ")[1].toLowerCase()
+  var rateLim = 15*60*1000 
+  if (WinMSTime == "m") {rateLim=Number(WinMS.split(" ")[0])*60*1000;} else if (WinMSTime == "h") {rateLim=Number(WinMS.split(" ")[0])*60*60*1000;}else if (WinMSTime == "s") {rateLim=Number(WinMS.split(" ")[0])*1000;} return rateLim
+}
+const apiLimit =  rateLimit({
+  windowMs: rateLimitWindow("api"),
+  max: Number(process.env["RateLimit-MaxReq-API"]) || Number(rateLimitConfig.api.maxReq),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Please dont spam this thanks! cause then i gonna make it higher"
+});
+const regLimit =  rateLimit({
+  windowMs: rateLimitWindow("reg"),
+  max: Number(process.env["RateLimit-MaxReq-REG"]) || Number(rateLimitConfig.reg.maxReq),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Please dont spam this thanks! cause then i gonna make it higher"
+});
+app.use("/api/*", apiLimit)
+app.use(regLimit)
 // respond with "hello world" when a GET request is made to the homepage
 app.use(cors({
     origin: '*.spectrum.net/*'
@@ -11,7 +36,7 @@ app.use(cors({
 app.get('/', (req, res) => {
   res.send('nothing here')
 })
-app.get('/channelOver/:uri', async (req, res) => {
+app.get('/api/channelOver/:uri', async (req, res) => {
     async function spectrumChannelOverlay(imgChannel){
         var canvas = await createCanvas(512,512)
         var ctx = canvas.getContext("2d");
