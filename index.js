@@ -30,7 +30,7 @@ app.use("/api/*", apiLimit)
 app.use(regLimit)
 // respond with "hello world" when a GET request is made to the homepage
 app.use(cors({
-    origin: '*.spectrum.net/*'
+    origin: '*'
 }));
 //app.get("*",(req,res)=>{console.log(req.headers);})
 app.get('/', (req, res) => {
@@ -78,7 +78,7 @@ app.get('/api/channelOver/:uri', async (req, res) => {
         await loadImage("https://cdnimg.spectrum.net/imageserver/series/"+imgChannel+"height=512").then((img) => {ctx.drawImage(img, (512/2)-(341/2), 0,341,512);})
         await roundedImage(20,20,170,170,14,ctx)
         ctx.clip()
-        await loadImage(img23).then((img) => {ctx.drawImage(img, 20,20,170,170);})
+        await loadImage("https://cdnimg.spectrum.net/imageserver/image/default?providerId="+img23+"&productId=PBSK&sourceType=colorhybrid&width=515&default=true").then((img) => {ctx.drawImage(img, 20,20,170,170);})
         ctx.restore()
         //var data =await canvas.toDataURL("image/png");
         var buffer=await canvas.toBuffer("image/png")
