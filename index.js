@@ -104,7 +104,7 @@ app.get('/api/channelOver/:uri', async (req, res) => {
 
       //set status code and headers
       res.writeHead(200, headers);
-    res.end(await spectrumChannelOverlay(req.params.uri))
+    res.end(await spectrumChannelOverlay(req.params.uri,req.params.uri2e))
   });
 
 
