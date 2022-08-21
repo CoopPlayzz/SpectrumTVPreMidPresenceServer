@@ -75,7 +75,7 @@ app.get('/api/channelOver/:uri', async (req, res) => {
     async function spectrumChannelOverlay(imgChannel,img23){
         var canvas = await createCanvas(512,512)
         var ctx = canvas.getContext("2d");
-        await loadImage("https://cdnimg.spectrum.net/imageserver/series/"+imgChannel+"height=512").then((img) => {ctx.drawImage(img, (512/2)-(341/2), 0,341,512);})
+        await loadImage("https://cdnimg.spectrum.net/imageserver/series/"+imgChannel+"?height=512").then((img) => {ctx.drawImage(img, (512/2)-(341/2), 0,341,512);})
         await roundedImage(20,20,170,170,14,ctx)
         ctx.clip()
         await loadImage("https://cdnimg.spectrum.net/imageserver/image/default?providerId="+img23+"&productId=PBSK&sourceType=colorhybrid&width=515&default=true").then((img) => {ctx.drawImage(img, 20,20,170,170);})
