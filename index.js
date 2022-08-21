@@ -71,14 +71,14 @@ app.get('/api/channelOver/:uri', async (req, res) => {
       res.writeHead(200, headers);
     res.end(await spectrumChannelOverlay(req.params.uri))
   });
-  app.get('/api/odShowOver/:uri', async (req, res) => {
-    async function spectrumChannelOverlay(imgChannel){
+  app.get('/api/odShowOver/:uri/:uri2e', async (req, res) => {
+    async function spectrumChannelOverlay(imgChannel,img23){
         var canvas = await createCanvas(512,512)
         var ctx = canvas.getContext("2d");
         await loadImage(imgChannel).then((img) => {ctx.drawImage(img, (512/2)-(341/2), 0,341,512);})
         await roundedImage(20,20,170,170,14,ctx)
         ctx.clip()
-        await loadImage('https://cdn.discordapp.com/app-assets/951615885922148412/951645722267250838.png').then((img) => {ctx.drawImage(img, 20,20,170,170);})
+        await loadImage(img23).then((img) => {ctx.drawImage(img, 20,20,170,170);})
         ctx.restore()
         //var data =await canvas.toDataURL("image/png");
         var buffer=await canvas.toBuffer("image/png")
